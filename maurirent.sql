@@ -1,247 +1,379 @@
-CREATE TABLE Users
+-- ****************** SqlDBM: MySQL ******************;
+-- ***************************************************;
+
+DROP TABLE `ExpensesDetails`;
+
+
+DROP TABLE `BillingDetails`;
+
+
+DROP TABLE `Pricing`;
+
+
+DROP TABLE `AccomodationDetails`;
+
+
+DROP TABLE `BookingDetails`;
+
+
+DROP TABLE `Reviews`;
+
+
+DROP TABLE `Logs`;
+
+
+DROP TABLE `Expense`;
+
+
+DROP TABLE `Billing`;
+
+
+DROP TABLE `Accomodation`;
+
+
+DROP TABLE `Booking`;
+
+
+DROP TABLE `Sessions`;
+
+
+DROP TABLE `Users`;
+
+
+
+-- ************************************** `Users`
+
+CREATE TABLE `Users`
 (
-  userID VARCHAR(50) NOT NULL,
-  surname VARCHAR(50) NOT NULL,
-  name VARCHAR(50) NOT NULL,
-  prefferedName VARCHAR(50) NOT NULL,
-  registrationType VARCHAR(20) NOT NULL,
-  age INT NOT NULL,
-  address1 VARCHAR(100) NOT NULL,
-  address2 VARCHAR(100) NOT NULL,
-  town VARCHAR(50) NOT NULL,
-  email VARCHAR(50) NOT NULL,
-  password VARCHAR(50) NOT NULL,
-  userType VARCHAR(20) NOT NULL,
-  homePhone INT NOT NULL,
-  mobilePhone INT NOT NULL,
-  dateModified DATE NOT NULL,
-  createdBy VARCHAR(50) NOT NULL,
-  modifiedBy VARCHAR(50) NOT NULL,
-  nationality VARCHAR(50) NOT NULL,
-  nic VARCHAR(50) NOT NULL,
-  PRIMARY KEY (userID)
+ `userID`           INT NOT NULL ,
+ `surname`          VARCHAR(55) NOT NULL ,
+ `name`             VARCHAR(55) NOT NULL ,
+ `prefferedName`    VARCHAR(55) ,
+ `registrationType` VARCHAR(30) NOT NULL ,
+ `age`              INT NOT NULL ,
+ `address1`         VARCHAR(55) NOT NULL ,
+ `address2`         VARCHAR(55) ,
+ `town`             VARCHAR(55) NOT NULL ,
+ `email`            VARCHAR(55) NOT NULL ,
+ `password`         VARCHAR(55) NOT NULL ,
+ `userType`         VARCHAR(55) NOT NULL ,
+ `homePhone`        VARCHAR(55) ,
+ `mobilePhone`      VARCHAR(55) NOT NULL ,
+ `dateModified`     DATE ,
+ `dateCreated`      DATE NOT NULL ,
+ `nationality`      VARCHAR(55) NOT NULL ,
+ `nic`              VARCHAR(55) NOT NULL ,
+
+PRIMARY KEY (`userID`)
 );
 
-CREATE TABLE Sessions
+
+
+
+
+
+-- ************************************** `Expense`
+
+CREATE TABLE `Expense`
 (
-  sessionID INT NOT NULL,
-  loginTimestamp INT NOT NULL,
-  logoutTimestamp INT NOT NULL,
-  dateCreated DATE NOT NULL,
-  dateModified DATE NOT NULL,
-  createdBy VARCHAR(50) NOT NULL,
-  modifiedBy VARCHAR(50) NOT NULL,
-  userID VARCHAR(50) NOT NULL,
-  PRIMARY KEY (sessionID),
-  FOREIGN KEY (userID) REFERENCES Users(userID)
+ `expenseID`           INT NOT NULL ,
+ `customer`            VARCHAR(55) NOT NULL ,
+ `details_description` VARCHAR(75) NOT NULL ,
+ `brn_vatNumber`       INT NOT NULL ,
+ `Status`              VARCHAR(55) NOT NULL ,
+ `userID`              INT NOT NULL ,
+
+PRIMARY KEY (`expenseID`),
+KEY `fkIdx_240` (`userID`),
+CONSTRAINT `FK_240` FOREIGN KEY `fkIdx_240` (`userID`) REFERENCES `Users` (`userID`)
 );
 
-CREATE TABLE Logs
+
+
+
+
+
+-- ************************************** `Billing`
+
+CREATE TABLE `Billing`
 (
-  logID INT NOT NULL,
-  description VARCHAR(75) NOT NULL,
-  createdBy VARCHAR(50) NOT NULL,
-  dateCreated DATE NOT NULL,
-  sessionID INT NOT NULL,
-  PRIMARY KEY (logID),
-  FOREIGN KEY (sessionID) REFERENCES Sessions(sessionID)
+ `billingID`      INT NOT NULL ,
+ `userID`         INT NOT NULL ,
+ `bill_numID`     INT NOT NULL ,
+ `totalVatExcl`   FLOAT NOT NULL ,
+ `totalVatIncl`   FLOAT NOT NULL ,
+ `discountAmount` FLOAT ,
+ `totalVat`       FLOAT NOT NULL ,
+ `discountCode`   INT ,
+ `amountPaid`     FLOAT ,
+ `amountReturned` FLOAT NOT NULL ,
+
+PRIMARY KEY (`billingID`),
+KEY `fkIdx_201` (`userID`),
+CONSTRAINT `FK_201` FOREIGN KEY `fkIdx_201` (`userID`) REFERENCES `Users` (`userID`)
 );
 
-CREATE TABLE Accomodation
+
+
+
+
+
+-- ************************************** `Accomodation`
+
+CREATE TABLE `Accomodation`
 (
-  accomodationID INT NOT NULL,
-  type VARCHAR(50) NOT NULL,
-  shortDescription VARCHAR(50) NOT NULL,
-  longDescription VARCHAR(50) NOT NULL,
-  address1 VARCHAR(50) NOT NULL,
-  address2 VARCHAR(50) NOT NULL,
-  town VARCHAR(50) NOT NULL,
-  lattitude VARCHAR(20) NOT NULL,
-  longitude VARCHAR(20) NOT NULL,
-  agreement_acceptation VARCHAR(50) NOT NULL,
-  agreement_acceptation_date DATE NOT NULL,
-  features VARCHAR(50) NOT NULL,
-  capacity VARCHAR(30) NOT NULL,
-  date_created DATE NOT NULL,
-  date_modified DATE NOT NULL,
-  createdBy VARCHAR(50) NOT NULL,
-  modifiedBy VARCHAR(50) NOT NULL,
-  accomodation_numID INT NOT NULL,
-  userID VARCHAR(50) NOT NULL,
-  PRIMARY KEY (accomodationID),
-  FOREIGN KEY (userID) REFERENCES Users(userID),
-  UNIQUE (accomodation_numID)
+ `accomodationID`             INT NOT NULL ,
+ `userID`                     INT NOT NULL ,
+ `type`                       VARCHAR(55) NOT NULL ,
+ `shortDescription`           VARCHAR(55) ,
+ `longDescription`            VARCHAR(55) ,
+ `address1`                   VARCHAR(55) NOT NULL ,
+ `address2`                   VARCHAR(55) ,
+ `town`                       VARCHAR(55) NOT NULL ,
+ `lattitude`                  VARCHAR(55) ,
+ `longitude`                  VARCHAR(55) ,
+ `agreement_acceptation`      VARCHAR(55) NOT NULL ,
+ `agreement_acceptation_date` DATE NOT NULL ,
+ `features`                   VARCHAR(55) NOT NULL ,
+ `capacity`                   VARCHAR(55) NOT NULL ,
+ `dateCreated`                DATE NOT NULL ,
+ `dateModified`               DATE ,
+ `createdBy`                  VARCHAR(55) NOT NULL ,
+ `modifiedBy`                 VARCHAR(55) ,
+
+PRIMARY KEY (`accomodationID`),
+KEY `fkIdx_152` (`userID`),
+CONSTRAINT `FK_152` FOREIGN KEY `fkIdx_152` (`userID`) REFERENCES `Users` (`userID`)
 );
 
-CREATE TABLE Accomodation_Details
+
+
+
+
+
+-- ************************************** `Booking`
+
+CREATE TABLE `Booking`
 (
-  accomodationDetailsID INT NOT NULL,
-  url VARCHAR(100) NOT NULL,
-  resourceType VARCHAR(20) NOT NULL,
-  accomodationDetails_numID INT NOT NULL,
-  accomodationID INT NOT NULL,
-  PRIMARY KEY (accomodationDetailsID),
-  FOREIGN KEY (accomodationID) REFERENCES Accomodation(accomodationID),
-  UNIQUE (accomodationDetails_numID)
+ `bookingID`    INT NOT NULL ,
+ `itemsCounts`  INT NOT NULL ,
+ `status`       VARCHAR(55) NOT NULL ,
+ `bookingNumID` INT NOT NULL ,
+ `userID`       INT NOT NULL ,
+
+PRIMARY KEY (`bookingID`),
+KEY `fkIdx_79` (`userID`),
+CONSTRAINT `FK_79` FOREIGN KEY `fkIdx_79` (`userID`) REFERENCES `Users` (`userID`)
 );
 
-CREATE TABLE Booking
+
+
+
+
+
+-- ************************************** `Sessions`
+
+CREATE TABLE `Sessions`
 (
-  bookingID INT NOT NULL,
-  itemsCounts INT NOT NULL,
-  status INT NOT NULL,
-  dateCreated DATE NOT NULL,
-  dateModified INT NOT NULL,
-  createdBy VARCHAR(50) NOT NULL,
-  modifiedBy DATE NOT NULL,
-  booking_numID INT NOT NULL,
-  userID VARCHAR(50) NOT NULL,
-  PRIMARY KEY (bookingID),
-  FOREIGN KEY (userID) REFERENCES Users(userID),
-  UNIQUE (booking_numID)
+ `sessionID`       INT NOT NULL ,
+ `loginTimestamp`  INT NOT NULL ,
+ `logoutTimestamp` INT NOT NULL ,
+ `dateCreated`     DATE NOT NULL ,
+ `dateModified`    DATE ,
+ `createdBy`       VARCHAR(55) NOT NULL ,
+ `modifiedBy`      VARCHAR(55) ,
+ `userID`          INT NOT NULL ,
+
+PRIMARY KEY (`sessionID`),
+KEY `fkIdx_50` (`userID`),
+CONSTRAINT `FK_50` FOREIGN KEY `fkIdx_50` (`userID`) REFERENCES `Users` (`userID`)
 );
 
-CREATE TABLE booking_Details
+
+
+
+
+
+-- ************************************** `ExpensesDetails`
+
+CREATE TABLE `ExpensesDetails`
 (
-  bookingDetailsID INT NOT NULL,
-  bokingdDetails_NumID INT NOT NULL,
-  startDate DATE NOT NULL,
-  endDate DATE NOT NULL,
-  startTime DATE NOT NULL,
-  endTime DATE NOT NULL,
-  peopleCount INT NOT NULL,
-  status VARCHAR(50) NOT NULL,
-  dateCreated DATE NOT NULL,
-  dateModified DATE NOT NULL,
-  datePending DATE NOT NULL,
-  dateCancel DATE NOT NULL,
-  createdBy VARCHAR(50) NOT NULL,
-  modifiedBy VARCHAR(50) NOT NULL,
-  dateConfirmed DATE NOT NULL,
-  bookingID INT NOT NULL,
-  accomodationID INT NOT NULL,
-  PRIMARY KEY (bookingDetailsID),
-  FOREIGN KEY (bookingID) REFERENCES Booking(bookingID),
-  FOREIGN KEY (accomodationID) REFERENCES Accomodation(accomodationID),
-  UNIQUE (bokingdDetails_NumID)
+ `expenseDetailsID`      INT NOT NULL ,
+ `expensesDetails_numId` INT NOT NULL ,
+ `amountVatExcl`         FLOAT NOT NULL ,
+ `amountVatIncl`         FLOAT NOT NULL ,
+ `description`           VARCHAR(55) NOT NULL ,
+ `paymentMethod`         VARCHAR(55) NOT NULL ,
+ `validatedBy`           VARCHAR(55) NOT NULL ,
+ `dateValidated`         DATE NOT NULL ,
+ `createdBy`             VARCHAR(55) NOT NULL ,
+ `modifiedBy`            VARCHAR(55) NOT NULL ,
+ `dateCreated`           DATE NOT NULL ,
+ `dateModified`          DATE ,
+ `expenseID`             INT NOT NULL ,
+
+PRIMARY KEY (`expenseDetailsID`),
+KEY `fkIdx_257` (`expenseID`),
+CONSTRAINT `FK_257` FOREIGN KEY `fkIdx_257` (`expenseID`) REFERENCES `Expense` (`expenseID`)
 );
 
-CREATE TABLE Reviews
+
+
+
+
+
+-- ************************************** `BillingDetails`
+
+CREATE TABLE `BillingDetails`
 (
-  reviewID INT NOT NULL,
-  review_numID INT NOT NULL,
-  rating INT NOT NULL,
-  review_description VARCHAR(55) NOT NULL,
-  dateCreated DATE NOT NULL,
-  dateModified DATE NOT NULL,
-  createdBy VARCHAR(55) NOT NULL,
-  modifiedBy VARCHAR(55) NOT NULL,
-  accomodationID INT NOT NULL,
-  bookingID INT NOT NULL,
-  userID VARCHAR(50) NOT NULL,
-  PRIMARY KEY (reviewID),
-  FOREIGN KEY (accomodationID) REFERENCES Accomodation(accomodationID),
-  FOREIGN KEY (bookingID) REFERENCES Booking(bookingID),
-  FOREIGN KEY (userID) REFERENCES Users(userID),
-  UNIQUE (review_numID)
+ `billingDetailsID`     INT NOT NULL ,
+ `status`               VARCHAR(55) NOT NULL ,
+ `billingDetails_numID` INT NOT NULL ,
+ `dateCreated`          DATE NOT NULL ,
+ `dateModified`         DATE ,
+ `createdBy`            VARCHAR(55) NOT NULL ,
+ `modifiedBy`           VARCHAR(55) ,
+ `billingID`            INT NOT NULL ,
+ `bookingID`            INT NOT NULL ,
+
+PRIMARY KEY (`billingDetailsID`),
+KEY `fkIdx_214` (`billingID`),
+CONSTRAINT `FK_214` FOREIGN KEY `fkIdx_214` (`billingID`) REFERENCES `Billing` (`billingID`),
+KEY `fkIdx_223` (`bookingID`),
+CONSTRAINT `FK_223` FOREIGN KEY `fkIdx_223` (`bookingID`) REFERENCES `Booking` (`bookingID`)
 );
 
-CREATE TABLE Pricing
+
+
+
+
+
+-- ************************************** `Pricing`
+
+CREATE TABLE `Pricing`
 (
-  pricingID INT NOT NULL,
-  DateStarted DATE NOT NULL,
-  dateEnd DATE NOT NULL,
-  unitPrice FLOAT NOT NULL,
-  minUnit INT NOT NULL,
-  unit INT NOT NULL,
-  status VARCHAR(55) NOT NULL,
-  commision FLOAT NOT NULL,
-  pricing_numID INT NOT NULL,
-  dateCreated DATE NOT NULL,
-  dateModified DATE NOT NULL,
-  createdBy VARCHAR(55) NOT NULL,
-  modifiedBy VARCHAR(55) NOT NULL,
-  accomodationID INT NOT NULL,
-  PRIMARY KEY (pricingID),
-  FOREIGN KEY (accomodationID) REFERENCES Accomodation(accomodationID),
-  UNIQUE (pricing_numID)
+ `pricingID`      INT NOT NULL ,
+ `DateStarted`    DATE NOT NULL ,
+ `dateEnd`        DATE NOT NULL ,
+ `unitPrice`      FLOAT NOT NULL ,
+ `minUnit`        INT NOT NULL ,
+ `unit`           INT NOT NULL ,
+ `status`         VARCHAR(55) NOT NULL ,
+ `commision`      FLOAT NOT NULL ,
+ `pricing_numID`  INT NOT NULL ,
+ `dateCreated`    DATE NOT NULL ,
+ `dateModified`   DATE ,
+ `createdBy`      VARCHAR(55) NOT NULL ,
+ `modifiedBy`     VARCHAR(55) ,
+ `accomodationID` INT NOT NULL ,
+
+PRIMARY KEY (`pricingID`),
+KEY `fkIdx_172` (`accomodationID`),
+CONSTRAINT `FK_172` FOREIGN KEY `fkIdx_172` (`accomodationID`) REFERENCES `Accomodation` (`accomodationID`)
 );
 
-CREATE TABLE Billing
+
+
+
+
+
+-- ************************************** `AccomodationDetails`
+
+CREATE TABLE `AccomodationDetails`
 (
-  billingID INT NOT NULL,
-  bill_numID INT NOT NULL,
-  totalVatExcl FLOAT NOT NULL,
-  totalVatIncl FLOAT NOT NULL,
-  discountAmount FLOAT NOT NULL,
-  totalVat FLOAT NOT NULL,
-  discountCode INT NOT NULL,
-  amountPaid FLOAT NOT NULL,
-  amountReturned FLOAT NOT NULL,
-  dateCreated DATE NOT NULL,
-  status VARCHAR(55) NOT NULL,
-  dateModified DATE NOT NULL,
-  createdBy VARCHAR(55) NOT NULL,
-  modifiedBy VARCHAR(55) NOT NULL,
-  userID VARCHAR(50) NOT NULL,
-  PRIMARY KEY (billingID),
-  FOREIGN KEY (userID) REFERENCES Users(userID),
-  UNIQUE (bill_numID)
+ `accomodationDetailsID`     INT NOT NULL ,
+ `url`                       VARCHAR(55) ,
+ `resourceType`              VARCHAR(55) NOT NULL ,
+ `accomodationDetails_NumID` INT NOT NULL ,
+ `accomodationID`            INT NOT NULL ,
+
+PRIMARY KEY (`accomodationDetailsID`),
+KEY `fkIdx_149` (`accomodationID`),
+CONSTRAINT `FK_149` FOREIGN KEY `fkIdx_149` (`accomodationID`) REFERENCES `Accomodation` (`accomodationID`)
 );
 
-CREATE TABLE Billing_Details
+
+
+
+
+
+-- ************************************** `BookingDetails`
+
+CREATE TABLE `BookingDetails`
 (
-  billingDetailsID INT NOT NULL,
-  cost DATE NOT NULL,
-  status VARCHAR(55) NOT NULL,
-  billingDetails_numID INT NOT NULL,
-  dateCreated DATE NOT NULL,
-  dateModified DATE NOT NULL,
-  createdBy VARCHAR(55) NOT NULL,
-  modifiedBy VARCHAR(55) NOT NULL,
-  billingID INT NOT NULL,
-  bookingID INT NOT NULL,
-  PRIMARY KEY (billingDetailsID),
-  FOREIGN KEY (billingID) REFERENCES Billing(billingID),
-  FOREIGN KEY (bookingID) REFERENCES Booking(bookingID),
-  UNIQUE (billingDetails_numID)
+ `bookingDetailsID`     INT NOT NULL ,
+ `bokingdDetails_NumID` INT NOT NULL ,
+ `startDate`            DATE NOT NULL ,
+ `endDate`              DATE NOT NULL ,
+ `startTime`            DATETIME NOT NULL ,
+ `endTime`              DATETIME NOT NULL ,
+ `peopleCount`          INT NOT NULL ,
+ `status`               VARCHAR(55) NOT NULL ,
+ `dateCreated`          DATE NOT NULL ,
+ `dateModified`         DATE ,
+ `datePending`          DATE NOT NULL ,
+ `dateCancel`           DATE ,
+ `dateConfirmed`        DATE NOT NULL ,
+ `createdBy`            VARCHAR(55) NOT NULL ,
+ `modifiedBy`           VARCHAR(55) ,
+ `bookingID`            INT NOT NULL ,
+
+PRIMARY KEY (`bookingDetailsID`),
+KEY `fkIdx_185` (`bookingID`),
+CONSTRAINT `FK_185` FOREIGN KEY `fkIdx_185` (`bookingID`) REFERENCES `Booking` (`bookingID`)
 );
 
-CREATE TABLE Expense
+
+
+
+
+
+-- ************************************** `Reviews`
+
+CREATE TABLE `Reviews`
 (
-  expenseID INT NOT NULL,
-  customer VARCHAR(55) NOT NULL,
-  details_description VARCHAR(75) NOT NULL,
-  brn_vatNumber INT NOT NULL,
-  Status VARCHAR(55) NOT NULL,
-  paymentMethod VARCHAR(55) NOT NULL,
-  validatedBy VARCHAR(55) NOT NULL,
-  dateValidation DATE NOT NULL,
-  createdBy VARCHAR(55) NOT NULL,
-  modifiedBy VARCHAR(55) NOT NULL,
-  dateCreated DATE NOT NULL,
-  dateModified DATE NOT NULL,
-  userID VARCHAR(50) NOT NULL,
-  PRIMARY KEY (expenseID),
-  FOREIGN KEY (userID) REFERENCES Users(userID)
+ `reviewID`           INT NOT NULL ,
+ `bookingID`          INT NOT NULL ,
+ `userID`             INT NOT NULL ,
+ `accomodationID`     INT NOT NULL ,
+ `review_numID`       INT NOT NULL ,
+ `rating`             INT NOT NULL ,
+ `review_description` VARCHAR(55) ,
+ `dateCreated`        DATE NOT NULL ,
+ `dateModified`       DATE ,
+ `createdBy`          VARCHAR(55) NOT NULL ,
+ `modifiedBy`         VARCHAR(55) ,
+
+PRIMARY KEY (`reviewID`, `bookingID`, `userID`, `accomodationID`),
+KEY `fkIdx_91` (`bookingID`),
+CONSTRAINT `FK_91` FOREIGN KEY `fkIdx_91` (`bookingID`) REFERENCES `Booking` (`bookingID`),
+KEY `fkIdx_94` (`userID`),
+CONSTRAINT `FK_94` FOREIGN KEY `fkIdx_94` (`userID`) REFERENCES `Users` (`userID`),
+KEY `fkIdx_176` (`accomodationID`),
+CONSTRAINT `FK_176` FOREIGN KEY `fkIdx_176` (`accomodationID`) REFERENCES `Accomodation` (`accomodationID`)
 );
 
-CREATE TABLE Expenses_Detail
+
+
+
+
+
+-- ************************************** `Logs`
+
+CREATE TABLE `Logs`
 (
-  expensesDetails_numId INT NOT NULL,
-  amountVatExcl FLOAT NOT NULL,
-  amountVatIncl FLOAT NOT NULL,
-  description VARCHAR(55) NOT NULL,
-  paymentMethod VARCHAR(55) NOT NULL,
-  validatedBy VARCHAR(55) NOT NULL,
-  dateValidated DATE NOT NULL,
-  createdBy VARCHAR(55) NOT NULL,
-  modifiedBy VARCHAR(55) NOT NULL,
-  dateCreated DATE NOT NULL,
-  dateModified DATE NOT NULL,
-  expenseDetailsID INT NOT NULL,
-  expenseID INT NOT NULL,
-  PRIMARY KEY (expenseDetailsID),
-  FOREIGN KEY (expenseID) REFERENCES Expense(expenseID),
-  UNIQUE (expensesDetails_numId)
+ `logID`        NOT NULL ,
+ `description` VARCHAR(75) NOT NULL ,
+ `createdBy`   VARCHAR(55) NOT NULL ,
+ `dateCreated` DATE NOT NULL ,
+ `sessionID`   INT NOT NULL ,
+
+PRIMARY KEY (`logID`),
+KEY `fkIdx_53` (`sessionID`),
+CONSTRAINT `FK_53` FOREIGN KEY `fkIdx_53` (`sessionID`) REFERENCES `Sessions` (`sessionID`)
 );
+
+
+
+
+
