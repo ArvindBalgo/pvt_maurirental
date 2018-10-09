@@ -1,0 +1,6 @@
+Below is the link for the ERD for Mauri Rent system: 
+https://app.sqldbm.com/MySQL/Share/nFA2fahfl5BVN-519LIWfUGFrngIE8md_DYjF4jNYw0.
+
+Note: The link shows the full ERD along with the relationships between the different tables.
+However, due to s/w limitation, I was not able to add the type of relation between the table. This was successfully completed in 09/10 commit: MauriRent_Relationship_Diagram.PNG.
+Please refer to this one for futher information about the type of relationship between the tables.
